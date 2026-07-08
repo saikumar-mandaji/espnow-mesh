@@ -1,0 +1,29 @@
+# Default sdkconfig fragment for espnow-mesh.
+#
+# Applied automatically by `idf.py build` / `idf.py set-target`. Override
+# the node role per physical board either via `idf.py menuconfig` or by
+# supplying an additional -DSDKCONFIG_DEFAULTS fragment / editing sdkconfig
+# directly after the first configure, e.g.:
+#
+#   idf.py set-target esp32
+#   idf.py menuconfig   # espnow-mesh Configuration -> Node role
+#   idf.py build flash monitor
+#
+# Default target is a plain ESP32 (matches ESP32-DevKitC-32E, see
+# docs/hardware/BOM.md). Default role is LEAF.
+
+CONFIG_IDF_TARGET="esp32"
+
+CONFIG_ESPNOW_MESH_ROLE_LEAF=y
+
+# ESP-NOW works fine with default Wi-Fi/power-management settings, but we
+# disable modem sleep so battery-node latency stays low and predictable
+# during bring-up/testing. Revisit for real battery-powered deployments,
+# where duty-cycled sleep would be the actual point.
+CONFIG_ESP_WIFI_PS_ENABLE=n
+
+# Long-range mode is deliberately left off: ESP-NOW long-range mode is not
+# interoperable with stock Wi-Fi channel behavior on peer discovery
+# assumptions this project makes (single fixed channel, section
+# docs/ARCHITECTURE.md). Keep it disabled unless you specifically need the
+# longer range and know all nodes will do the same.

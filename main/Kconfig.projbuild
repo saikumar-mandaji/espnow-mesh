@@ -1,0 +1,27 @@
+menu "espnow-mesh Configuration"
+
+    choice ESPNOW_MESH_ROLE
+        prompt "Node role"
+        default ESPNOW_MESH_ROLE_LEAF
+        help
+            Selects which of the three mesh roles this build targets.
+            Flash the same firmware image (with the role set accordingly)
+            onto each of the physical boards described in
+            docs/hardware/BOM.md:
+
+              - Node A: LEAF  (originates sensor readings, forwards)
+              - Node B: RELAY (forwards only, does not originate readings)
+              - Node C: ROOT  (gateway -- consumes payloads, never forwards)
+
+        config ESPNOW_MESH_ROLE_LEAF
+            bool "Leaf (originates sensor data + forwards)"
+
+        config ESPNOW_MESH_ROLE_RELAY
+            bool "Relay (forwards only)"
+
+        config ESPNOW_MESH_ROLE_ROOT
+            bool "Root / gateway (consumes payloads, does not forward)"
+
+    endchoice
+
+endmenu

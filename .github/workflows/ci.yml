@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  host-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run portable mesh core host tests
+        run: make -C tests/host test
+
+  firmware-build:
+    runs-on: ubuntu-latest
+    container:
+      image: espressif/idf:v5.2
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL || true
+      - name: Build firmware
+        shell: bash
+        run: |
+          . $IDF_PATH/export.sh
+          idf.py set-target esp32
+          idf.py build
