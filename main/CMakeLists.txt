@@ -7,5 +7,10 @@
 idf_component_register(
     SRCS "main.c"
     INCLUDE_DIRS "."
-    REQUIRES mesh esp_wifi esp_now nvs_flash esp_event
+    # Note: esp_now.h is provided by the esp_wifi component in ESP-IDF
+    # v5.2+ (there is no separate "esp_now" component to require -- it was
+    # merged into esp_wifi). Requiring a nonexistent "esp_now" component
+    # fails CMake's component resolution with "Failed to resolve component
+    # 'esp_now'."
+    REQUIRES mesh esp_wifi nvs_flash esp_event
 )
